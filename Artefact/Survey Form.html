@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js">
+    </script>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F1 Survey Form</title>
+
+    <style>
+        body {
+            /*background-color: white;*/
+            background-color: crimson;
+            font-family: Verdana;
+            text-align: center;
+        }
+
+        form {
+            background-color: #fff;
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 30px 20px;
+            box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+        }
+
+        .form-control {
+            margin: 20px;
+        }
+
+        .align {
+            display: flex;
+        }
+
+        .bar_select {
+            background-color: black;
+            overflow: hidden;
+        }
+
+        /* Style the links inside the navigation bar */
+        .bar_select a {
+            float: left;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 17px;
+        }
+
+        /* Change the color of links on hover */
+        .bar_select a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        /* Add a color to the active/current link */
+        .bar_select a.active {
+            background-color: crimson;
+            color: white;
+        }
+
+        .bar_select {
+            background-color: #333;
+            overflow: hidden;
+        }
+
+        /* Style the links inside the navigation bar */
+        .bar_select a {
+            float: left;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        /* Change the color of links on hover */
+        .bar_select a:hover {
+            background-color: white;
+            color: black;
+        }
+
+        /* Add a color to the active/current link */
+        .bar_select a.active {
+            background-color: red;
+            color: white;
+        }
+    </style>
+
+</head>
+
+<body>
+    <img src="f1logotransparent.png" alt="alternatetext">
+    <div class="bar_select">
+        <a class="active" href="./Website.html">Home</a>
+        <a href="./Survey Form.html">Survey</a>
+    </div>
+    <div class='beside'>
+        <h1>F1 SURVEY FORM</h1>
+        <form id="F1_form" class="graph">
+
+            <div class="form-control">
+                <label for="name" id="label-name">
+                    Name
+                </label>
+                <input type="text" id="name" placeholder="Enter your name" required />
+
+
+
+            </div>
+            <div class="form-control">
+                <label for="age" id="label-age">
+                    Age
+                </label>
+
+                <!-- Input Type Text -->
+                <input type="text" id="age" placeholder="Enter your age" required />
+            </div>
+            <div class="form-control">
+                <label>
+                    Do You Enjoy Formula 1 ?
+                </label>
+
+                <input type="radio" id="TRUE" value="yes" name="Question" required checked>Yes </input>
+                <input type="radio" id="FALSE" value="yes" name="Question">No
+            </div>
+
+            <div class="form-control">
+                <label>How Many Formula 1 Races Have You Watched ?</label><br>
+                <input type="radio" name="inp" value="0" checked required>0</input>
+                <input type="radio" name="inp" value='1'>1</input>
+                <input type="radio" name="inp" value='5'>>5</input>
+                <input type="radio" name="inp" value='10'>>10</input>
+                <input type="radio" name="inp" value='25'>>25</input>
+                <input type="radio" name="inp" value='50'>>50</input>
+                <input type="radio" name="inp" value='100'>>100</input>
+            </div>
+
+            <div class="form-control">
+                <label for="fav_driver" id="label-fav_driver">
+                    Favourite Driver
+                </label>
+                <!-- <input type="text" id="fav_driver" placeholder="Enter Your Favourite Driver" /> -->
+                <input list="favourite_driver" id="fav_driver" name="user_fav_driver" required />
+                <datalist id="favourite_driver">
+                </datalist>
+            </div>
+
+            <div class="form-control">
+                <label for="comment">
+                    Any comments or suggestions ?
+                </label>
+
+                <!-- multi-line text input control -->
+                <textarea name="comment" id="comment" maxlength="100" placeholder="Enter your comment here"> </textarea>
+            </div>
+
+            <button type="submit" value="submit" colour="white">
+                Submit
+            </button>
+        </form>
+
+        <div>
+            <p id="info_for_user">
+
+            </p>
+            <p id="info_for_user_races">
+
+            </p>
+        </div>
+
+
+        <div class="graph">
+            <canvas id="User_Survey_Graph"
+                style="width:100%;max-width:1000px;background-color: #fff;border-radius: 13px;margin:0 auto;"></canvas><br>
+        </div>
+    </div>
+    <img src="f1mercedees.png" alt="alternatetext" width="1850" height="1000">
+    <script type="module">
+
+
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAJXcm9HcPKT6gEqrZGmQ36yXRHPOj03-k",
+            authDomain: "lc-230655.firebaseapp.com",
+            databaseURL: "https://lc-230655-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "lc-230655",
+            storageBucket: "lc-230655.firebasestorage.app",
+            messagingSenderId: "318311720263",
+            appId: "1:318311720263:web:d9d38b55ad638532dc5862",
+            measurementId: "G-7ZWZP6FQX2"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+
+        import { getDatabase, ref, set, get, update, child, onValue } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
+        const database = getDatabase(); //This creates a firebase instance
+        // let link_to_database_root = ref(database); //This creates a reference (link) to the root of your database
+
+        //This will create a reference to whatever address comes after the comma
+        const firebaseRef = ref(database);
+        let unique__driver_names = [];
+        function processing(snapshot) {
+            console.log('Inside processing node: ', snapshot.key)
+            if (snapshot.key == "DRIVER") {
+                console.log('drivers called')
+
+                let driver_names_data = {};
+
+                driver_names_data = snapshot.val()
+                unique__driver_names = Object.values(driver_names_data)
+                console.log(unique__driver_names)
+
+                document.getElementById('favourite_driver').innerHTML = unique__driver_names.map(driver_name => `<option value="${driver_name}">${driver_name}</option>`).join("");
+            }
+        }
+        get(child(firebaseRef, '/DRIVER')).then(processing);
+
+        //THIS THE FUNCTION THAT CHECKS THE AGE INPUT AND CHECKS IF IT IS VALID , i.e must be a number 
+        function CheckAgeInput(UserAgeInput) {
+            if (isNaN(UserAgeInput)) {
+                alert("Not a number please enter a valid age!")
+                return false
+            }
+            else if (UserAgeInput > 0) {
+                console.log("Number is greater than 0")
+                return true
+            }
+            else if (UserAgeInput < 0) {
+                console.log("Number is less then 0")
+                return false
+            }
+        }
+
+        //THIS IS THE FUNCTION THAT CHECKS THE USERS FAVOURITE DRIVER INPUT TO MKAE SURE IT IS A VALID DRIVER
+        function CheckFavDriverInput(FavDriver) {
+            //here i want to check if the input for fav driver is one of the drivers on the list , if not return false
+            let index = unique__driver_names.indexOf(FavDriver)
+            console.log("--------------------------------------------------------------------------------------")
+            console.log(FavDriver)
+            console.log(index)
+            if (index != -1) {
+                console.log("Driver is in list")
+                return true
+            }
+            else if (index == -1) {
+                console.log("Driver not found")
+                return false
+            }
+        }
+
+        //THIS IS THE FUNCTION THAT CHECKS THE NAME INPUT TO MAKE SURE NO SPECIAL CHARACTERS HAVE BEEN ENTERED. I.E : MUST ONLY BE LETTERS A-Z 
+        function CheckNameInput(NameInput) {
+            let pattern2 = /^[a-zA-Z ]{2,30}$/;
+            let result2 = pattern2.test(NameInput);
+            return result2
+            //alert('name check:'+ result2)
+            // this returns true or false based on the condition
+        }
+
+        //console.log("Hello")
+
+        //HERE I SET THE USERS INPUTS TO A SPECIFIC VARIABLE SO THAT I CAN DO OPERATIONS ON THEM
+
+        let Form_Updater = document.getElementById("F1_form")
+        let NameInput = document.getElementById("name");
+        let AgeInput = document.getElementById("age");
+        let TrueOrFalse = document.querySelectorAll('input[name="Question"]');
+        let RacesWatched = document.querySelectorAll('input[name="inp"]');
+        let FavDriver = document.getElementById("fav_driver")
+        let Suggestions = document.getElementById("comment")
+
+
+        Form_Updater.addEventListener('submit', uservaluesetter)
+
+
+        function uservaluesetter(event) {
+
+
+            event.preventDefault();
+            let UserNameInput = NameInput.value
+            let UserAgeInput = AgeInput.value
+            let UserFavDriver = FavDriver.value
+            let UserSuggestions = Suggestions.value
+            let TrueOrFalseInput = 'false'
+            let RacesWatchedInput = 0
+            //alert('user pressed button')
+            //alert(NameInput.value)
+            //alert(UserNameInput)
+
+            CheckAgeInput(AgeInput.value)
+
+            //alert(AgeInput.value)
+
+            //alert(FavDriver.value)
+            //alert(Suggestions.value)
+            for (let i = 0; i < TrueOrFalse.length; i++) {
+                let choice = TrueOrFalse[i].checked;
+                if (choice === true) {
+                    TrueOrFalseInput = 'true'
+                    // alert(TrueOrFalse[i].value)
+
+                    //alert(TrueOrFalseInput)
+                }
+            }
+
+            for (let i = 0; i < RacesWatched.length; i++) {
+                let choice = RacesWatched[i].checked;
+                if (choice === true) {
+                    //alert(RacesWatched[i].value)
+                    RacesWatchedInput = RacesWatched[i].value
+                }
+            }
+
+            let testing = CheckFavDriverInput(FavDriver.value);
+            console.log('testing', testing)
+
+            // let testing2 = CheckNameInput(NameInput.value);
+            // console.log('testing 2', testing2)
+
+
+            //DATA FOR FIREBASE
+            if (CheckAgeInput(UserAgeInput) == false) {
+                alert("Check Age Input, can only be numbers")
+            }
+            else if (CheckNameInput(UserNameInput) == false) {
+                console.log(UserNameInput)
+                alert("Check Name Input Ivalid, Can only be alphabetic letters")
+            }
+            else if (CheckFavDriverInput(FavDriver.value) == false) {
+                console.log(FavDriver)
+                alert("Check Favourite Driver Input, Must be a valid driver")
+            }
+            else {
+                let dictionary_for_firebase = { 'NameInput': UserNameInput, 'AgeInput': UserAgeInput, 'TrueOrFalse': TrueOrFalseInput, 'RacesWatched': RacesWatchedInput, 'FavDriver': UserFavDriver, 'Suggestions': UserSuggestions }
+                writeUserData(dictionary_for_firebase)
+            }
+        }
+
+        let colors_list = ['rgba(255, 99, 132, 0.6)',
+            'rgba(254, 159, 64, 0.59)',
+            'rgba(254, 205, 86, 0.59)',
+            'rgba(76, 192, 192, 0.59)',
+            'rgba(56, 162, 235, 0.59)',
+            'rgba(154, 102, 255, 0.59)']
+
+        let boarder_colors_list = [
+            'rgb(255, 99, 132)',
+            'rgb(255, 159, 64)',
+            'rgb(255, 205, 86)',
+            'rgb(75, 192, 192)',
+            'rgb(54, 162, 235)',
+            'rgb(153, 102, 255)']
+
+
+        let AgeTotal = 0
+        let Number_of_ages = 0
+        let racesWatchedTotal = 0
+
+
+
+
+
+
+        function writeUserData(data_to_upload) {
+
+            set(ref(database, 'USER_INFO/' + Date.now()),
+                data_to_upload
+            );
+        }
+
+        onValue(ref(database, 'USER_INFO/'), (snapshot) => {
+            const data = snapshot.val();
+            console.log(data)
+            //updateStarCount(postElement, data);
+            var count = 0;
+            var UserFavouriteDriver = {}
+            AgeTotal = 0
+            Number_of_ages = 0
+            racesWatchedTotal = 0
+            for (let [key, value] of Object.entries(data)) {
+                var count = 0;
+
+                if (value["FavDriver"] in UserFavouriteDriver) {  //Adds plus 1 to the count of that specifc driver being entered as a favourite driver
+                    UserFavouriteDriver[value["FavDriver"]] = UserFavouriteDriver[value["FavDriver"]] + 1
+                }
+
+                else {
+                    UserFavouriteDriver[value["FavDriver"]] = 1//Appends the favourite driver that the user entered into the dictionary of favourite drivers
+                }
+
+                //HERE I CALCULATE THE AGE TOTAL ALONG WITH THE AVERAGE AGE AND AVERGE RACES WATCHED
+                console.log('on update: ', parseInt(value["AgeInput"]))
+                AgeTotal += parseInt(value["AgeInput"])
+                console.log(AgeTotal)
+                Number_of_ages += 1
+                console.log(Number_of_ages)
+                console.log(AgeTotal)
+
+                racesWatchedTotal += parseInt(value["RacesWatched"])
+                //console.log("Races watched is :")
+                //console.log(value["RacesWatched"])
+                //console.log("Races watched total is :")
+                //console.log(racesWatchedTotal)s
+                console.log('average is: ', AgeTotal / Number_of_ages)
+
+
+
+
+
+            }
+            document.getElementById('info_for_user').innerHTML = `The Average Age Of People Who Subbmitted The Survey is ${parseInt(AgeTotal / Number_of_ages)}`;
+            document.getElementById('info_for_user_races').innerHTML = `The Average Amount Of races watched by people Who Subbmitted The Survey is ${parseInt(racesWatchedTotal / Number_of_ages)}`;
+            graphData(document.getElementById("User_Survey_Graph"), Object.keys(UserFavouriteDriver), Object.values(UserFavouriteDriver))
+
+        });
+
+        let ChartReference = null;
+        let ChartData = {
+            type: "bar", data: {
+                labels: [], datasets: [{
+                    data: [],
+                    backgroundColor: 'white'
+                }]
+            }, options: {
+                legend: {
+                    display: false
+                },
+                title: { display: true, text: 'Users Favourite Drivers Results' },
+                scales: {
+                    yAxes: [{
+                        ticks: { beginAtZero: true }, scaleLabel: {
+                            display: true,
+                            labelString: 'User Favourites Count'
+                        }
+                    }], xAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Favourite Drivers'
+                        }
+                    }],
+                }
+            }
+        }
+
+
+        //Draws graph using my data
+        function graphData(canvasID, x, y) {
+            if (ChartReference) {
+                //console.log('destroying chart')
+                ChartReference.destroy()
+            }
+            let backgroundColors = []
+            let boardercolors = []
+            const xValues = x//[50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150];
+            const yValues = y// [7, 8, 8, 9, 9, 9, 10, 11, 14, 14, 15];
+            for (let i = 0; i < xValues.length; i++) {
+                backgroundColors.push(colors_list[i % colors_list.length]);
+                boardercolors.push(boarder_colors_list[i % boarder_colors_list.length]);
+            }
+
+            ChartData.data.labels = xValues//selected_countries;
+            ChartData.data.datasets[0].data = yValues//selected_countries_values;
+            ChartData.data.datasets[0].backgroundColor = backgroundColors
+
+            ChartData.data.datasets[0].borderColor = boardercolors
+            ChartData.data.datasets[0].borderWidth = 3
+
+            //console.log('This data is:', UserFavouriteDriver);
+            ChartReference = new Chart(canvasID, ChartData);
+        }
+
+    </script>
+
+</body>
+
+</html>

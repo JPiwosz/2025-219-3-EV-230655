@@ -1,0 +1,754 @@
+<!-- THIS IS THE START OF THE WEBSITE HTML CODE -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Formula 1 Driver/Country Statistics</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js">
+    </script>
+    <style>
+        body {
+            /* background-color: crimson; */
+            background-color: white
+                /*background-color: rgba(30,30,30,0.9)*/
+        }
+
+        #checkboxes {
+            background-color: crimson;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+        }
+
+        .text {
+            margin: 2vh;
+            font-size: larger;
+        }
+
+        button {
+            margin: 2vh;
+        }
+
+        .bar_select {
+            background-color: black;
+            overflow: hidden;
+        }
+
+        /* Style the links inside the navigation bar */
+        .bar_select a {
+            float: left;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 17px;
+        }
+
+        /* Change the color of links on hover */
+        .bar_select a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        /* Add a color to the active/current link */
+        .bar_select a.active {
+            background-color: crimson;
+            color: white;
+        }
+
+        .bar_select {
+            background-color: #333;
+            overflow: hidden;
+        }
+
+        /* Style the links inside the navigation bar */
+        .bar_select a {
+            float: left;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        /* Change the color of links on hover */
+        .bar_select a:hover {
+            background-color: white;
+            color: black;
+        }
+
+        /* Add a color to the active/current link */
+        .bar_select a.active {
+            background-color: crimson;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <img src="f1logo3.jpg" alt="alternatetext">
+    <div class="bar_select">
+        <a class="active" href="#home">Home</a>
+        <a href="./Survey Form.html">Survey</a>
+    </div>
+
+    <h1>
+        F1 Insight 🏎️
+    </h1>
+
+    <h1>
+        FORMULA 1: STATISTICS
+    </h1>
+
+    <h2>
+        This is a Formula 1 Statistics Website That Contains Information About Drivers And Their Nationalities.
+        The Information Consists Of Each Specific Drivers Wins, How Many Races They Entered, How Many Championship Wins
+        They Have If Any..
+        And The Drivers Winrate. It Also Contains The Statistics Of Each Nationality Meaning That You Can View The Wins
+        Of Each Nationality
+        That Participates In Formula 1.
+    </h2>
+
+    <h2>
+        Note: The Drivers And Countries Which Can Be Viewed Are Only Available To Be Seen If They Have At Least One Win!
+        This Is Because There Is Simply Too Much Drivers Without Wins And Makes The Information Easier to Consume.
+    </h2>
+    <div id="Not in Use">
+        <label>Select Nationalies To Compare:</label>
+        <div id="checkboxes"></div>
+        <div>
+            <button id="NationalityButton">Make Changes</button>
+            <button id="NationalityReset">Reset</button>
+        </div>
+        <div class="text">
+            <p>
+                This Graph Dispays Information About: The amount of total wins each country has. These values are taken
+                from each drivers nationality and are added to
+                the the country that they are from. The user can adjust the countries that are displayed in the graph
+                and can control the amount of countries displayed.
+                The user does this by selecting from the provided checkboxes. The countries are displayed in
+                alphabetical order.
+            </p>
+        </div>
+    </div>
+    <canvas id="NATIONALITY_WINS" style="width:100%;max-width:30000px; margin:0 auto;"></canvas>
+    <canvas id="NATIONALITY_WINS2" style="width:100%;max-width:3000px; margin:0 auto;"></canvas><br><br><br>
+    <div>
+        <label for="driver_choice">Choose a Driver:</label>
+        <input list="wins_by_driver" id="driver_choice" name="driver_choice" />
+        <datalist id="wins_by_driver">
+        </datalist>
+        <label for="driver_choice2">Choose a Driver:</label>
+        <input list="wins_by_driver2" id="driver_choice2" name="driver_choice2" />
+        <datalist id="wins_by_driver2">
+        </datalist>
+        <label for="driver_choice3">Choose a Driver:</label>
+        <input list="wins_by_driver3" id="driver_choice3" name="driver_choice3" />
+        <datalist id="wins_by_driver3">
+        </datalist>
+        <button id="DriverWinsButton">Make Changes</button>
+        <button id="DriverWinReset">Reset</button>
+        <div class="text">
+            <p>
+                This Graph Displays Information About: The Amount of career wins each driver has in total, with all
+                drivers being compared to each other.
+                The User can then choose to compare 3 specific drivers
+                to each other by selecting them in the boxes above. In order for the new graph to be drawn 3 unique
+                drivers must be entered.
+            </p>
+        </div>
+        <canvas id="DRIVER_WINS" style="width:100%;max-width:3000px;"></canvas>
+    </div>
+    <div>
+        <button id="DriverWinRateButton">Make Changes</button>
+        <button id="DriverWinRate_Reset">Reset</button>
+        <label>Minimum Value</label>
+        <label id="minimum_output">0</label>
+        <input type="range" min="1" max="50" value="0" id="scale1">
+
+        <label>Maxinum Value</label>
+        <label id="maxinum_output">50%</label>
+        <input type="range" min="1" max="50" value="50" id="scale2">
+        <div class="text">
+            <p>
+                This Graph Dispays Information About: All the drivers winrates throughout their career all compered to
+                each other.
+                Each drivers Win Rate is based on the amount of races each driver has won divided by the number of races
+                the driver
+                Has entered providing their Win Rate. The user can then choose via the use of the interactive scaler
+                inorder to display
+                Only the drivers that have the coresponding Win Rate. For example if the user chooses to input 10% as
+                the minimum value and
+                40% as the Maxinum value, only drivers that have a win rate between 10% and 40% will be shown on the new
+                graph.
+            </p>
+        </div>
+
+        <canvas id="DRIVER_WINRATE" style="width:100%;max-width:3000px;"></canvas>
+    </div>
+
+    <h1>
+        FAQ's 🏎️
+    </h1>
+
+    <h2>
+        In the following questions:<br>
+        1) Enter a Country to find out if they preformed well throughout F1's History<br>
+        2) Enter a Driver to find out if they preformed well throughout F1's History<br>
+    </h2>
+
+    <h3>
+        Note: The calculation to find out wether or not a driver or country prefromed well is based on averadges.<br>
+        EG: If you enter the country "Italy" it has not preformed well because it has less than the averadge number of
+        wins for a country.<br>
+    </h3>
+
+    <div>
+        <label for="User_Country">Choose a Country:</label>
+        <input list="wins_by_country" id="Country_Choice" name="Country_Choice" />
+        <button id="CountryButton">Confrim</button>
+        <datalist id="wins_by_country">
+        </datalist>
+    </div>
+    <div>
+        <p id="Answer1">
+
+        </p>
+        <p id="Reply1">
+
+        </p>
+    </div>
+
+    <div>
+        <label for="Driver_Choice_FAQ">Choose a Driver:</label>
+        <input list="wins_by_driver4" id="Driver_Choice_FAQ" name="Driver_Choice_FAQ" />
+        <button id="DriverButton">Confrim</button>
+        <datalist id="wins_by_driver4">
+        </datalist>
+    </div>
+
+    <div>
+        <p id="Answer2">
+
+        </p>
+        <p id="Reply2">
+
+        </p>
+    </div>
+    <img src="f1ferrari.jpg" alt="alternatetext" width="2000" height="1000">
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAJXcm9HcPKT6gEqrZGmQ36yXRHPOj03-k",
+            authDomain: "lc-230655.firebaseapp.com",
+            databaseURL: "https://lc-230655-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "lc-230655",
+            storageBucket: "lc-230655.firebasestorage.app",
+            messagingSenderId: "318311720263",
+            appId: "1:318311720263:web:d9d38b55ad638532dc5862",
+            measurementId: "G-7ZWZP6FQX2"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+
+        import { getDatabase, ref, set, get, update, child } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
+        const database = getDatabase(); //This creates a firebase instance
+        // let link_to_database_root = ref(database); //This creates a reference (link) to the root of your database
+        //This will create a reference to whatever address comes after the comma
+        const firebaseRef = ref(database);
+        //Store wins by nationality
+        let nationality_wins_data_for_graph = {};
+        let unique_nationalities_data_for_graph = [];
+        //store driver wins by name
+        let driver_wins_data_for_graph = {};
+        let unique_winner_driver_names_for_graph = []
+        //store driver winrate by name
+        let drivers_winrate_data_for_graph = {};
+        let Avg_Country = 0
+        let Avg_Drivers = 0
+
+        let colors_list = ['rgba(255, 99, 132, 0.6)',
+            'rgba(254, 159, 64, 0.59)',
+            'rgba(254, 205, 86, 0.59)',
+            'rgba(76, 192, 192, 0.59)',
+            'rgba(56, 162, 235, 0.59)',
+            'rgba(154, 102, 255, 0.59)']
+
+        let boarder_colors_list = [
+            'rgb(255, 99, 132)',
+            'rgb(255, 159, 64)',
+            'rgb(255, 205, 86)',
+            'rgb(75, 192, 192)',
+            'rgb(54, 162, 235)',
+            'rgb(153, 102, 255)']
+        function processing(snapshot) {
+            console.log('Inside processing node: ', snapshot.key)
+            if (snapshot.key == "NATIONALITY_WINS") {
+                console.log('nationality wins called')
+                nationality_wins_data_for_graph = snapshot.val()
+                unique_nationalities_data_for_graph = Object.keys(nationality_wins_data_for_graph)
+                document.getElementById('wins_by_country').innerHTML = unique_nationalities_data_for_graph.map(driver_name => `<option value="${driver_name}">${driver_name}</option>`).join("");
+            }
+            else if (snapshot.key == "DRIVER_WINS") {
+                console.log("Driver wins called")
+                driver_wins_data_for_graph = snapshot.val()
+                unique_winner_driver_names_for_graph = Object.keys(driver_wins_data_for_graph)
+                document.getElementById('wins_by_driver').innerHTML = unique_winner_driver_names_for_graph.map(driver_name => `<option value="${driver_name}">${driver_name}</option>`).join("");
+                document.getElementById('wins_by_driver2').innerHTML = unique_winner_driver_names_for_graph.map(driver_name => `<option value="${driver_name}">${driver_name}</option>`).join("");
+                document.getElementById('wins_by_driver3').innerHTML = unique_winner_driver_names_for_graph.map(driver_name => `<option value="${driver_name}">${driver_name}</option>`).join("");
+                document.getElementById('wins_by_driver4').innerHTML = unique_winner_driver_names_for_graph.map(driver_name => `<option value="${driver_name}">${driver_name}</option>`).join("");
+            }
+            else if (snapshot.key == 'DRIVER_WINRATE') {
+                console.log("Driver winrate called")
+                drivers_winrate_data_for_graph = snapshot.val()
+            }
+
+            const xvalues = Object.keys(snapshot.val())
+            const yvalues = Object.values(snapshot.val())
+            let canvasID = snapshot.key.split(' ').join('_')
+
+            graphData(canvasID, xvalues, yvalues)
+
+        }
+
+        let Selector_Countries = document.getElementById("Answer1");
+        function Recomendation1(snapshot) {
+            if (snapshot.exists) {
+                //alert("called")
+                console.log('Inside recomendation 1 node: ', snapshot.key)
+                Avg_Country = Object.values(snapshot.val())
+                console.log(snapshot.val()['AVERAGE_WINS_FOR_COUNTRY'])
+
+
+            }
+            else {
+                console.log('snapshot is empty')
+            }
+        }
+
+
+        get(child(firebaseRef, '/AVERAGE_WINS_FOR_COUNTRY')).then(Recomendation1);
+
+        let Selector_Drivers = document.getElementById("Answer2");
+        function Recomendation2(snapshot) {
+            if (snapshot.exists) {
+                //alert("called")
+                console.log('Inside recomendation 2 node: ', snapshot.key)
+                Avg_Drivers = Object.values(snapshot.val())
+                console.log(snapshot.val()['AVERAGE_WINS_FOR_DRIVER'])
+
+
+            }
+            else {
+                console.log('snapshot is empty')
+            }
+        }
+
+        get(child(firebaseRef, '/AVERAGE_WINS_FOR_DRIVER')).then(Recomendation2);
+
+
+        let nationalitiesChart = null;
+        let nationalitiesChartData = {
+            type: "bar", data: { labels: [], datasets: [{ data: [] }] }, options: {
+                legend: {
+                    display: false
+                },
+                title: { display: true, text: 'Total Race Wins By Nationality' },
+                scales: {
+                    yAxes: [{
+                        ticks: { beginAtZero: true }, scaleLabel: {
+                            display: true,
+                            labelString: 'Total Amount Of Races Won'
+                        }
+                    }], xAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Nationalities / Countries'
+                        }
+                    }],
+                }
+            }
+        }
+
+        let nationalitiesPieChart = null;
+        let nationalitiesPieChartData = {
+            type: "pie", data: { labels: [], datasets: [{ data: [] }] }, options: {
+                legend: {
+                    display: false
+                },
+                title: { display: true, text: 'Total Race Wins By Nationality' },
+
+
+            }
+        }
+
+        get(child(firebaseRef, '/NATIONALITY_WINS')).then(processing);
+        //get(child(firebaseRef, '/NATIONALITY_WINS2')).then(processing);
+
+
+
+        let driverswinsChart = null;
+        let driverswinsChartData = {
+            type: "bar", data: { labels: [], datasets: [{ data: [] }] }, options: {
+                legend: {
+                    display: false
+                },
+                title: { display: true, text: 'Career Race Wins By Driver' },
+                scales: {
+                    yAxes: [{
+                        ticks: { beginAtZero: true }, scaleLabel: {
+                            display: true,
+                            labelString: 'Career Race Win Count'
+                        }
+                    }], xAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Drivers'
+                        }
+                    }],
+                }
+            }
+        }
+
+        get(child(firebaseRef, '/DRIVER_WINS')).then(processing);
+
+        let driverwinrateChart = null;
+        let driverwinrateChartData = {
+            type: "line", data: { labels: [], datasets: [{ data: [] }] }, options: {
+                legend: {
+                    display: false
+                },
+                title: { display: true, text: 'WinRate By Driver' },
+                scales: {
+                    yAxes: [{
+                        ticks: { beginAtZero: true }, scaleLabel: {
+                            display: true,
+                            labelString: 'WinRate Percentage'
+                        }
+                    }], xAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Drivers'
+                        }
+                    }],
+                }
+            }
+        }
+
+        get(child(firebaseRef, '/DRIVER_WINRATE')).then(processing);
+
+        get(child(firebaseRef, '/UNIQUE_NATIONALITIES')).then(
+            (snapshot) => {
+                console.log(snapshot.val())
+                unique_nationalities_data_for_graph = snapshot.val()
+                CheckBoxMaker(unique_nationalities_data_for_graph)
+            }
+        );
+
+        function CheckBoxMaker(countrys_list) {
+
+            let reference = document.getElementById("checkboxes")
+
+            countrys_list.sort()
+            for (let country_name of countrys_list) {
+                //console.log(country_info)
+                const label = document.createElement("label");
+                const checkbox = document.createElement("input");
+                checkbox.classList.add("countriesCheckboxes");
+                checkbox.type = "checkbox";
+                checkbox.id = "some-id";
+                checkbox.name = "some-name";
+                checkbox.value = country_name;
+
+                const textContent = document.createTextNode(country_name);
+
+                label.appendChild(checkbox);
+                label.appendChild(textContent);
+                let referenceDiv = document.createElement("div");
+                //document.body.appendChild(label);
+                referenceDiv.appendChild(label)
+                reference.appendChild(referenceDiv);
+            }
+        }
+
+        var button = document.getElementById("NationalityButton");
+        button.addEventListener("click", function (event) {
+            //alert(event.target);
+
+
+            var checkboxes = document.querySelectorAll("input[type=checkbox][name=some-name]");
+            let selected_countries = [];
+            let selected_countries_values = [];
+            selected_countries =
+                Array.from(checkboxes) // Convert checkboxes to an array to use filter and map.
+                    .filter(i => i.checked) // Use Array.filter to remove unchecked checkboxes.
+                    .map(i => i.value) // Use Array.map to extract only the checkbox values from the array of objects.
+
+            for (let country of selected_countries) {
+                selected_countries_values.push(nationality_wins_data_for_graph[country]);
+            }
+            console.log(nationality_wins_data_for_graph)  //logs the values of the countries selected
+            console.log(selected_countries_values)
+            nationalitiesChartData.data.labels = selected_countries;
+            nationalitiesChartData.data.datasets[0].data = selected_countries_values;//selected_countries_values;
+            nationalitiesChart.update();
+            nationalitiesPieChartData.data.labels = selected_countries//selected_countries;
+            nationalitiesPieChartData.data.datasets[0].data = selected_countries_values//selected_countries_values;
+            nationalitiesPieChart.update();
+
+        });
+        // LISTENER FOR CHOOSE DRIVER WINS RESET
+        var button_fordriverwins = document.getElementById("DriverWinsButton");
+        button_fordriverwins.addEventListener("click", function (event) {
+            let tmpx = [];
+            let tmpy = [];
+            //alert(event.target);
+            console.log(document.getElementById("driver_choice").value);
+            let DriverName1 = document.getElementById("driver_choice").value;
+            tmpx.push(DriverName1)
+            tmpy.push(driver_wins_data_for_graph[DriverName1]);
+            let DriverName2 = document.getElementById("driver_choice2").value;
+            if (tmpx.includes(DriverName2)) {
+                alert("Driver " + DriverName2 + " has been entered more than once")
+            }
+            else {
+                tmpx.push(DriverName2)
+                tmpy.push(driver_wins_data_for_graph[DriverName2]);
+            }
+            let DriverName3 = document.getElementById("driver_choice3").value;
+            if (tmpx.includes(DriverName3)) {
+                alert("Driver " + DriverName3 + " has been entered more than once")
+            }
+            else {
+                tmpx.push(DriverName3)
+                tmpy.push(driver_wins_data_for_graph[DriverName3]);
+            }
+            if (tmpx.length == 3) {
+                graphData('DRIVER_WINS', tmpx, tmpy)
+            }
+            else {
+                alert("You must choose 3 drivers to compare!")
+            }
+
+        });
+
+        var range1 = document.getElementById('scale1')
+        var range2 = document.getElementById('scale2')
+        range1.addEventListener("change", function (event) {
+            //alert(range.value);
+            if (range1.value > range2.value) {
+                range1.value = range2.value
+                alert("Minimum Value can not exceed Maxinum Value")
+            }
+            document.getElementById('minimum_output').textContent = range1.value;
+            let Minimum_User_Input = range1.value;
+            console.log(Minimum_User_Input)
+        })
+
+
+        range2.addEventListener("change", function (event) {
+            //alert(range.value)
+            if (range1.value > range2.value) {
+                range2.value = range1.value
+                alert("Minimum Value can not exceed Maxinum Value")
+            }
+            document.getElementById('maxinum_output').textContent = range2.value;
+            let Maxinum_User_Input = range2.value;
+            console.log(Maxinum_User_Input)
+        })
+
+        var button_fordriverwinrate = document.getElementById("DriverWinRateButton");
+        button_fordriverwinrate.addEventListener("click", function (event) {
+            //alert(event.target);
+            let Minimum_Selected = range1.value;
+            let Maxinum_Selected = range2.value;
+            let drivers_names = []
+            let drivers_percent_winrate = []
+            console.log(drivers_winrate_data_for_graph)
+            for (let each_name of unique_winner_driver_names_for_graph) {
+                console.log(range1.value, range2.value)
+                console.log(each_name)
+                if (drivers_winrate_data_for_graph[each_name] >= range1.value && drivers_winrate_data_for_graph[each_name] <= range2.value) {
+                    drivers_names.push(each_name)
+                    drivers_percent_winrate.push(drivers_winrate_data_for_graph[each_name])
+                }
+            }
+            console.log(drivers_names, drivers_percent_winrate)
+            if (drivers_names.length > 0) {
+                graphData("DRIVER_WINRATE", drivers_names, drivers_percent_winrate)
+            }
+            else {
+                alert("No Driver has coresponding winrate")
+            }
+        })
+
+        var button_fordriverwins = document.getElementById("CountryButton");
+        button_fordriverwins.addEventListener("click", function (event) {
+            //alert(event.target);
+            console.log(nationality_wins_data_for_graph)
+            console.log(nationality_wins_data_for_graph[Country_Choice.value])
+            console.log("THIS IS THE AVERAGE COUNTRY", Avg_Country)
+            if (nationality_wins_data_for_graph[Country_Choice.value] >= Avg_Country) {
+                document.getElementById("Answer1").innerHTML = `${Country_Choice.value} has preformed better than the average Country`
+                document.getElementById("Reply1").innerHTML = `${Country_Choice.value} has ${nationality_wins_data_for_graph[Country_Choice.value]} Wins, the average is, ${Avg_Country}`
+            }
+            else if (nationality_wins_data_for_graph[Country_Choice.value] <= Avg_Country) {
+                document.getElementById("Answer1").innerHTML = `${Country_Choice.value} has preformed worse than the average Country`
+                document.getElementById("Reply1").innerHTML = `${Country_Choice.value} has ${nationality_wins_data_for_graph[Country_Choice.value]} Wins, the average is, ${Avg_Country}`
+            }
+            else {
+                alert("Invalid Country")
+            }
+        });
+
+        var button_fordriverwins = document.getElementById("DriverButton");
+        button_fordriverwins.addEventListener("click", function (event) {
+            //alert(event.target);
+            console.log(driver_wins_data_for_graph)
+            console.log(driver_wins_data_for_graph[Driver_Choice_FAQ.value])
+            if (driver_wins_data_for_graph[Driver_Choice_FAQ.value] >= Avg_Drivers) {
+                document.getElementById("Answer2").innerHTML = `${Driver_Choice_FAQ.value} has preformed better than the average Driver`
+                document.getElementById("Reply2").innerHTML = `${Driver_Choice_FAQ.value} has ${driver_wins_data_for_graph[Driver_Choice_FAQ.value]} Wins, the average is, ${Avg_Drivers}`
+            }
+            else if (driver_wins_data_for_graph[Driver_Choice_FAQ.value] <= Avg_Drivers) {
+                document.getElementById("Answer2").innerHTML = `${Driver_Choice_FAQ.value} has preformed worse than the average Driver`
+                document.getElementById("Reply2").innerHTML = `${Driver_Choice_FAQ.value} has ${driver_wins_data_for_graph[Driver_Choice_FAQ.value]} Wins, the average is, ${Avg_Drivers}`
+            }
+            else {
+                alert("Invalid Driver")
+            }
+        });
+
+
+        function graphData(canvasID, x, y) {
+            const xValues = x//[50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150];
+            const yValues = y// [7, 8, 8, 9, 9, 9, 10, 11, 14, 14, 15];
+            let backgroundColors = []
+            let boardercolors = []
+            for (let i = 0; i < xValues.length; i++) {
+                backgroundColors.push(colors_list[i % colors_list.length]);
+                boardercolors.push(boarder_colors_list[i % boarder_colors_list.length]);
+            }
+            let currentCanvas = document.getElementById(canvasID)
+            if (canvasID == 'NATIONALITY_WINS') {
+                console.log(canvasID);
+
+
+                nationalitiesChartData.data.labels = xValues//selected_countries;
+                nationalitiesChartData.data.datasets[0].data = yValues//selected_countries_values;
+                nationalitiesChartData.data.datasets[0].backgroundColor = backgroundColors
+
+                nationalitiesChartData.data.datasets[0].borderColor = boardercolors
+                nationalitiesChartData.data.datasets[0].borderWidth = 3
+                console.log('This data is:', nationalitiesChartData);
+                nationalitiesChart = new Chart(currentCanvas, nationalitiesChartData);
+
+
+                nationalitiesPieChartData.data.labels = xValues//selected_countries;
+                nationalitiesPieChartData.data.datasets[0].data = yValues//selected_countries_values;
+                nationalitiesPieChartData.data.datasets[0].backgroundColor = backgroundColors
+
+                nationalitiesPieChartData.data.datasets[0].borderColor = boardercolors
+                nationalitiesPieChartData.data.datasets[0].borderWidth = 3
+                console.log('This data is:', nationalitiesPieChartData);
+                nationalitiesPieChart = new Chart('NATIONALITY_WINS2', nationalitiesPieChartData);
+            }
+            else if (canvasID == 'DRIVER_WINS') {
+                if (driverswinsChart) {
+                    console.log('destroying chart')
+                    driverswinsChart.destroy()
+                }
+
+                driverswinsChartData.data.labels = xValues//selected_countries;
+                driverswinsChartData.data.datasets[0].data = yValues//selected_countries_values;
+                driverswinsChartData.data.datasets[0].backgroundColor = backgroundColors
+
+                driverswinsChartData.data.datasets[0].borderColor = boardercolors
+                driverswinsChartData.data.datasets[0].borderWidth = 3
+                console.log(driverswinsChartData);
+                driverswinsChart = new Chart(currentCanvas, driverswinsChartData);
+            }
+            else if (canvasID == 'DRIVER_WINRATE') {
+                if (driverwinrateChart) {
+                    console.log('destroying chart')
+                    driverwinrateChart.destroy()
+                }
+
+                driverwinrateChartData.data.labels = xValues//selected_countries;
+                driverwinrateChartData.data.datasets[0].data = yValues//selected_countries_values;
+                driverwinrateChartData.data.datasets[0].backgroundColor = backgroundColors
+
+                driverwinrateChartData.data.datasets[0].borderColor = boardercolors
+                driverwinrateChartData.data.datasets[0].borderWidth = 3
+                driverwinrateChart = new Chart(currentCanvas, driverwinrateChartData);
+            }
+            //Add the other two graphs in here in an else-if-else block
+            // links to lines 93 - 101 above
+
+        }
+
+        var ResetButton1 = document.getElementById("NationalityReset");
+        ResetButton1.addEventListener("click", GraphReset)
+        function GraphReset(event) {
+            if (event.target.id == "NationalityReset") {
+                if (nationalitiesChart) {
+                    console.log('destroying chart')
+                    nationalitiesChart.destroy()
+                    nationalitiesPieChart.destroy()
+                }
+                var clist = document.getElementsByClassName("countriesCheckboxes");
+                for (var i = 0; i < clist.length; ++i) { clist[i].checked = false; }
+                graphData("NATIONALITY_WINS", Object.keys(nationality_wins_data_for_graph), Object.values(nationality_wins_data_for_graph))
+            }
+        }
+
+        var ResetButton2 = document.getElementById("DriverWinReset");
+        ResetButton2.addEventListener("click", GraphReset2)
+        function GraphReset2(event) {
+            if (event.target.id == "DriverWinReset") {
+                if (driverswinsChart) {
+                    console.log('destroying chart')
+                    driverswinsChart.destroy()
+                }
+                console.log("This is", driver_wins_data_for_graph)
+                //var clist=document.getElementsByClassName("driver_choice");
+                //alert('working')
+                document.getElementById('driver_choice').value = ''
+                document.getElementById('driver_choice2').value = ''
+                document.getElementById('driver_choice3').value = ''
+                graphData("DRIVER_WINS", Object.keys(driver_wins_data_for_graph), Object.values(driver_wins_data_for_graph))
+
+            }
+        }
+
+        var ResetButton3 = document.getElementById("DriverWinRate_Reset");
+        ResetButton3.addEventListener("click", GraphReset3)
+        function GraphReset3(event) {
+            if (event.target.id == "DriverWinRate_Reset") {
+                if (driverswinsChart) {
+                    console.log('destroying chart')
+                    driverwinrateChart.destroy()
+                }
+                document.getElementById("scale1").value = 0
+                document.getElementById("minimum_output").innerHTML = 0
+                document.getElementById("scale2").value = 50
+                document.getElementById("maxinum_output").innerHTML = 50
+                graphData("DRIVER_WINRATE", Object.keys(drivers_winrate_data_for_graph), Object.values(drivers_winrate_data_for_graph))
+
+            }
+
+        }
+        //THIS IS WHERE THE FUNCTION FOR LISTENING TO EVENT GOES (CHECKBOX EVENT FOR NATIONALITES)
+    </script>
+
+
+</body>
+
+</html>
